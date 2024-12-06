@@ -1,4 +1,3 @@
-// src/app/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -7,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, ShoppingCart, BookOpen, Star } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
-// Sample book data
 const initialBooks = [
   {
     id: 1,
@@ -32,26 +31,14 @@ const initialBooks = [
     author: 'Sophia Martinez',
     price: 19.99,
     rating: 4.9,
-    cover: 'covers/cover.jpg'
-  },
-  {
-    id: 4,
-    title: 'Urban Whispers',
-    author: 'Sophia Martinez',
-    price: 19.99,
-    rating: 4.9,
-    cover: 'covers/cover.jpg'
+    cover: '/api/placeholder/200/300'
   }
 ];
 
 export default function Home() {
   const [books, setBooks] = useState(initialBooks);
-  const [cart, setCart] = useState<{ id: number; title: string; author: string; price: number; rating: number; cover: string }[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-
-  const addToCart = (book: { id: number; title: string; author: string; price: number; rating: number; cover: string }) => {
-    setCart([...cart, book]);
-  };
+  const { cart, addToCart } = useCart();
 
   const searchBooks = (term: string) => {
     const filtered = initialBooks.filter(book => 
@@ -94,7 +81,6 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Book Grid */}
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {books.map((book) => (

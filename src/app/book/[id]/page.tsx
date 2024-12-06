@@ -1,12 +1,10 @@
-// src/app/book/[id]/page.tsx
 'use client';
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Star } from 'lucide-react';
-import Image from 'next/image';
+import { useCart } from '@/context/CartContext';
 
-// Sample book data (you'll want to replace this with actual data fetching)
 const books = [
   {
     id: 1,
@@ -50,10 +48,18 @@ const books = [
 ];
 
 export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap params
-  const { id } = React.use(params);
-  // Convert id to number and find the book
-  const bookId = parseInt(id);
+  const { addToCart } = useCart();
+  const [unwrappedParams, setUnwrappedParams] = React.useState<{ id: string } | null>(null);
+
+  React.useEffect(() => {
+    params.then(setUnwrappedParams);
+  }, [params]);
+
+  if (!unwrappedParams) {
+    return <div className="container mx-auto p-6">Loading...</div>;
+  }
+
+  const bookId = parseInt(unwrappedParams.id);
   const book = books.find(b => b.id === bookId);
 
   if (!book) {
@@ -63,7 +69,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="container mx-auto p-6">
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Book Cover */}
         <div className="flex justify-center">
           <img 
             src={book.cover} 
@@ -72,7 +77,6 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           />
         </div>
 
-        {/* Book Details */}
         <div>
           <h1 className="text-3xl font-bold mb-4">{book.title}</h1>
           <p className="text-xl text-gray-600 mb-2">by {book.author}</p>
@@ -110,7 +114,10 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           </div>
 
           <div className="flex space-x-4">
-            <Button className="flex items-center">
+            <Button 
+              onClick={() => addToCart(book)}
+              className="flex items-center"
+            >
               <ShoppingCart className="mr-2" /> Add to Cart
             </Button>
             <Button variant="outline">

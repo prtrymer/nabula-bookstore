@@ -1,36 +1,15 @@
-// src/app/cart/page.tsx
 'use client';
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Trash2, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
-// Sample book data matching the main page
-const initialBooks = [
-  {
-    id: 1,
-    title: 'The Starlight Chronicles',
-    author: 'Elena Rodriguez',
-    price: 24.99,
-    cover: '/api/placeholder/100/150'
-  },
-  {
-    id: 2,
-    title: 'Quantum Horizons',
-    author: 'Dr. Michael Chen',
-    price: 29.99,
-    cover: '/api/placeholder/100/150'
-  }
-];
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState(initialBooks);
+  const { cart, removeFromCart } = useCart();
 
-  const removeFromCart = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="container mx-auto p-6">
@@ -38,16 +17,15 @@ export default function CartPage() {
         <ShoppingCart className="mr-3" /> Your Cart
       </h1>
 
-      {cartItems.length === 0 ? (
+      {cart.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-xl text-gray-600">Your cart is empty</p>
           <Button className="mt-4">Continue Shopping</Button>
         </div>
       ) : (
         <div className="grid md:grid-cols-[3fr_1fr] gap-8">
-          {/* Cart Items */}
           <div>
-            {cartItems.map((item) => (
+            {cart.map((item) => (
               <div 
                 key={item.id} 
                 className="flex items-center border-b py-4 hover:bg-gray-50 transition"
