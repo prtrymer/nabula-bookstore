@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react';
+import { Link, ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 const books = [
@@ -17,7 +17,8 @@ const books = [
     pages: 352,
     publisher: 'Cosmic Press',
     publicationDate: 'May 15, 2024',
-    genre: 'Science Fiction'
+    genre: 'Science Fiction',
+    quantity: 1
   },
   {
     id: 2,
@@ -30,7 +31,8 @@ const books = [
     pages: 288,
     publisher: 'Academic Frontier',
     publicationDate: 'March 1, 2024',
-    genre: 'Science & Technology'
+    genre: 'Science & Technology',
+    quantity: 1
   },
   {
     id: 3,
@@ -43,7 +45,50 @@ const books = [
     pages: 276,
     publisher: 'Metropolitan Press',
     publicationDate: 'January 22, 2024',
-    genre: 'Contemporary Fiction'
+    genre: 'Contemporary Fiction',
+    quantity: 1
+  },
+  {
+    id: 4,
+    title: 'The Starlight Chronicles',
+    author: 'Elena Rodriguez',
+    price: 24.99,
+    rating: 4.7,
+    cover: '/api/placeholder/400/600',
+    description: 'A captivating journey through distant galaxies, exploring the intricate relationships between interstellar civilizations and the individuals who shape their destinies.',
+    pages: 352,
+    publisher: 'Cosmic Press',
+    publicationDate: 'May 15, 2024',
+    genre: 'Science Fiction',
+    quantity: 1
+  },
+  {
+    id: 5,
+    title: 'Quantum Horizons',
+    author: 'Dr. Michael Chen',
+    price: 29.99,
+    rating: 4.5,
+    cover: '/api/placeholder/400/600',
+    description: 'A groundbreaking exploration of quantum mechanics, bridging the gap between complex scientific theory and accessible narrative.',
+    pages: 288,
+    publisher: 'Academic Frontier',
+    publicationDate: 'March 1, 2024',
+    genre: 'Science & Technology',
+    quantity: 1
+  },
+  {
+    id: 6,
+    title: 'Urban Whispers',
+    author: 'Sophia Martinez',
+    price: 19.99,
+    rating: 4.9,
+    cover: '/api/placeholder/400/600',
+    description: 'An intimate portrait of city life, weaving together the stories of diverse characters connected by the rhythms of metropolitan existence.',
+    pages: 276,
+    publisher: 'Metropolitan Press',
+    publicationDate: 'January 22, 2024',
+    genre: 'Contemporary Fiction',
+    quantity: 1
   }
 ];
 
@@ -56,18 +101,18 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   }, [params]);
 
   if (!unwrappedParams) {
-    return <div className="container mx-auto p-6">Loading...</div>;
+    return <div className="min-h-screen bg-gray-50">Loading...</div>;
   }
 
   const bookId = parseInt(unwrappedParams.id);
   const book = books.find(b => b.id === bookId);
 
   if (!book) {
-    return <div className="container mx-auto p-6">Book not found</div>;
+    return <div className="min-h-screen bg-gray-50 text-black">Book not found</div>;
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="min-h-screen bg-gray-50 text-black dark:bg-background-grey dark:text-white">
       <div className="grid md:grid-cols-2 gap-8">
         <div className="flex justify-center">
           <img 
@@ -91,7 +136,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
 
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Description</h2>
-            <p className="text-gray-700">{book.description}</p>
+            <p className="">{book.description}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 mb-6">
@@ -113,15 +158,16 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
             </div>
           </div>
 
-          <div className="flex space-x-4">
+            <div className="flex space-x-4">
             <Button 
-              onClick={() => addToCart(book)}
+              onClick={() => {
+              addToCart(book);
+              window.location.href = '/cart';
+              }}
               className="flex items-center"
             >
-              <ShoppingCart className="mr-2" /> Add to Cart
-            </Button>
-            <Button variant="outline">
-              Buy Now
+              <ShoppingCart className="mr-2" /> 
+              Add to Cart
             </Button>
           </div>
         </div>

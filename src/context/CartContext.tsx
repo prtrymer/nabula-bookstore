@@ -1,38 +1,35 @@
-// src/context/CartContext.tsx
 'use client';
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Define the book type
 export interface Book {
   id: number;
   title: string;
   author: string;
   price: number;
   cover: string;
+  quantity: number;
 }
 
-// Context type
 interface CartContextType {
   cart: Book[];
   addToCart: (book: Book) => void;
   removeFromCart: (bookId: number) => void;
   clearCart: () => void;
+  updateCartItemQuantity: (bookId: number, quantity: number) => void; 
 }
 
-// Create the context
 const CartContext = createContext<CartContextType>({
   cart: [],
   addToCart: () => {},
   removeFromCart: () => {},
-  clearCart: () => {}
+  clearCart: () => {},
+  updateCartItemQuantity: () => {} 
 });
 
-// Provider component
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<Book[]>([]);
 
-  // Load cart from localStorage on initial render
   useEffect(() => {
     const savedCart = localStorage.getItem('nabula-cart');
     if (savedCart) {
@@ -40,17 +37,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  // Update localStorage whenever cart changes
   useEffect(() => {
     localStorage.setItem('nabula-cart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (book: Book) => {
-    // Check if book is already in cart to prevent duplicates
     setCart(prevCart => {
       const exists = prevCart.some(item => item.id === book.id);
-      if (exists) return prevCart;
-      return [...prevCart, book];
+      if (exists) {
+        return prevCart.map(item =>
+          item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prevCart, { ...book, quantity: 1 }];
     });
   };
 
@@ -62,12 +61,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCart([]);
   };
 
+  const updateCartItemQuantity = (bookId: number, quantity: number) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === bookId ? { ...item, quantity: Math.max(0, quantity) } : item
+      )
+    );
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateCartItemQuantity }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-// Custom hook for using the cart context
 export const useCart = () => useContext(CartContext);
