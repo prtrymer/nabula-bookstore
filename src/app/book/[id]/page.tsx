@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Link, ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 const books = [

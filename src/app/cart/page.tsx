@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Trash2, ShoppingCart } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CalendarPopup from '@/components/CalendarPopup'; 
 
