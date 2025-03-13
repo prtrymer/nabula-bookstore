@@ -11,6 +11,7 @@ export const BookCover = ({ book, className = "max-w-full h-auto rounded-lg shad
   return (
     <Image
       width={500}
+      height={700}
       src={book.cover}
       alt={book.title}
       className={className}

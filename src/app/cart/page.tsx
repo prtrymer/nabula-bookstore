@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
 
 const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
 
@@ -31,7 +32,7 @@ export default function CartPage() {
                 key={item.id}
                 className="flex items-center border-b py-4 hover:bg-gray-200 dark:hover:bg-gray-800 transition"
               >
-                <img src={item.cover} alt={item.title} className="w-24 h-36 object-cover mr-6" />
+                <Image src={item.cover} alt={item.title} className="w-24 h-36 object-cover mr-6" />
                 <div className="flex-grow">
                   <h2 className="text-black dark:text-white font-semibold">{item.title}</h2>
                   <p className="text-gray-600 dark:text-gray-400">{item.author}</p>
