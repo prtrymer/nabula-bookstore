@@ -4,97 +4,15 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-
-const books = [
-  {
-    id: 1,
-    title: 'The Starlight Chronicles',
-    author: 'Elena Rodriguez',
-    price: 24.99,
-    rating: 4.7,
-    cover: '/api/placeholder/400/600',
-    description: 'A captivating journey through distant galaxies, exploring the intricate relationships between interstellar civilizations and the individuals who shape their destinies.',
-    pages: 352,
-    publisher: 'Cosmic Press',
-    publicationDate: 'May 15, 2024',
-    genre: 'Science Fiction',
-    quantity: 1
-  },
-  {
-    id: 2,
-    title: 'Quantum Horizons',
-    author: 'Dr. Michael Chen',
-    price: 29.99,
-    rating: 4.5,
-    cover: '/api/placeholder/400/600',
-    description: 'A groundbreaking exploration of quantum mechanics, bridging the gap between complex scientific theory and accessible narrative.',
-    pages: 288,
-    publisher: 'Academic Frontier',
-    publicationDate: 'March 1, 2024',
-    genre: 'Science & Technology',
-    quantity: 1
-  },
-  {
-    id: 3,
-    title: 'Urban Whispers',
-    author: 'Sophia Martinez',
-    price: 19.99,
-    rating: 4.9,
-    cover: '/api/placeholder/400/600',
-    description: 'An intimate portrait of city life, weaving together the stories of diverse characters connected by the rhythms of metropolitan existence.',
-    pages: 276,
-    publisher: 'Metropolitan Press',
-    publicationDate: 'January 22, 2024',
-    genre: 'Contemporary Fiction',
-    quantity: 1
-  },
-  {
-    id: 4,
-    title: 'The Starlight Chronicles',
-    author: 'Elena Rodriguez',
-    price: 24.99,
-    rating: 4.7,
-    cover: '/api/placeholder/400/600',
-    description: 'A captivating journey through distant galaxies, exploring the intricate relationships between interstellar civilizations and the individuals who shape their destinies.',
-    pages: 352,
-    publisher: 'Cosmic Press',
-    publicationDate: 'May 15, 2024',
-    genre: 'Science Fiction',
-    quantity: 1
-  },
-  {
-    id: 5,
-    title: 'Quantum Horizons',
-    author: 'Dr. Michael Chen',
-    price: 29.99,
-    rating: 4.5,
-    cover: '/api/placeholder/400/600',
-    description: 'A groundbreaking exploration of quantum mechanics, bridging the gap between complex scientific theory and accessible narrative.',
-    pages: 288,
-    publisher: 'Academic Frontier',
-    publicationDate: 'March 1, 2024',
-    genre: 'Science & Technology',
-    quantity: 1
-  },
-  {
-    id: 6,
-    title: 'Urban Whispers',
-    author: 'Sophia Martinez',
-    price: 19.99,
-    rating: 4.9,
-    cover: '/api/placeholder/400/600',
-    description: 'An intimate portrait of city life, weaving together the stories of diverse characters connected by the rhythms of metropolitan existence.',
-    pages: 276,
-    publisher: 'Metropolitan Press',
-    publicationDate: 'January 22, 2024',
-    genre: 'Contemporary Fiction',
-    quantity: 1
-  }
-];
+import booksData from '@/data/books.json';
+import { Book } from '@/types/book';
+import { BookCover } from '@/components/BookCover'; // Import the BookCover component
 
 export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { addToCart } = useCart();
-  const [unwrappedParams, setUnwrappedParams] = React.useState<{ id: string } | null>(null);
+  const [unwrappedParams, setUnwrappedParams] = React.useState<{
+    id: string;
+  } | null>(null);
 
   React.useEffect(() => {
     params.then(setUnwrappedParams);
@@ -105,6 +23,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   }
 
   const bookId = parseInt(unwrappedParams.id);
+  const books = booksData as Book[];
   const book = books.find(b => b.id === bookId);
 
   if (!book) {
@@ -114,18 +33,14 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="min-h-screen bg-gray-50 text-black dark:bg-background-grey dark:text-white">
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="flex justify-center">
-          <img 
-            src={book.cover} 
-            alt={book.title} 
-            className="max-w-full h-auto rounded-lg shadow-lg"
-          />
+        <div className="flex justify-center p-4">
+          <BookCover book={book} className="max-w-xs md:max-w-sm lg:max-w-md h-auto rounded-lg shadow-lg" />
         </div>
 
         <div>
           <h1 className="text-3xl font-bold mb-4">{book.title}</h1>
           <p className="text-xl text-gray-600 mb-2">by {book.author}</p>
-          
+
           <div className="flex items-center mb-4">
             <div className="flex items-center text-yellow-500 mr-4">
               <Star className="mr-1" fill="currentColor" />
@@ -158,15 +73,15 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
             </div>
           </div>
 
-            <div className="flex space-x-4">
-            <Button 
+          <div className="flex space-x-4">
+            <Button
               onClick={() => {
-              addToCart(book);
-              window.location.href = '/cart';
+                addToCart(book);
+                window.location.href = '/cart';
               }}
               className="flex items-center"
             >
-              <ShoppingCart className="mr-2" /> 
+              <ShoppingCart className="mr-2" />
               Add to Cart
             </Button>
           </div>

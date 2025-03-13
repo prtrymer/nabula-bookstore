@@ -30,7 +30,7 @@ export default function RootLayout({
         <ThemeProvider>
           <CartProvider>
             <Header />
-            <main>{children}</main>
+            <main className="flex-1 bg-gray-50 text-black dark:bg-background-grey dark:text-white mx-auto overflow-auto">{children}</main>
             <Footer />
           </CartProvider>
         </ThemeProvider>
