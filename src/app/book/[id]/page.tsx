@@ -1,17 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart, Star } from "lucide-react";
-import { useCart } from "@/context/CartContext";
-import booksData from "@/data/books.json";
-import { Book } from "@/types/book";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { ShoppingCart, Star } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import booksData from '@/data/books.json';
+import { Book } from '@/types/book';
+import { BookCover } from '@/components/BookCover'; // Import the BookCover component
 
-export default function BookDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { addToCart } = useCart();
   const [unwrappedParams, setUnwrappedParams] = React.useState<{
     id: string;
@@ -27,23 +24,17 @@ export default function BookDetailPage({
 
   const bookId = parseInt(unwrappedParams.id);
   const books = booksData as Book[];
-  const book = books.find((b) => b.id === bookId);
+  const book = books.find(b => b.id === bookId);
 
   if (!book) {
-    return (
-      <div className="min-h-screen bg-gray-50 text-black">Book not found</div>
-    );
+    return <div className="min-h-screen bg-gray-50 text-black">Book not found</div>;
   }
 
   return (
     <div className="min-h-screen bg-gray-50 text-black dark:bg-background-grey dark:text-white">
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="flex justify-center">
-          <img
-            src={book.cover}
-            alt={book.title}
-            className="max-w-full h-auto rounded-lg shadow-lg"
-          />
+        <div className="flex justify-center p-4">
+          <BookCover book={book} className="max-w-xs md:max-w-sm lg:max-w-md h-auto rounded-lg shadow-lg" />
         </div>
 
         <div>
@@ -55,9 +46,7 @@ export default function BookDetailPage({
               <Star className="mr-1" fill="currentColor" />
               <span>{book.rating} / 5</span>
             </div>
-            <span className="font-bold text-2xl text-indigo-600">
-              ${book.price.toFixed(2)}
-            </span>
+            <span className="font-bold text-2xl text-indigo-600">${book.price.toFixed(2)}</span>
           </div>
 
           <div className="mb-6">
@@ -88,7 +77,7 @@ export default function BookDetailPage({
             <Button
               onClick={() => {
                 addToCart(book);
-                window.location.href = "/cart";
+                window.location.href = '/cart';
               }}
               className="flex items-center"
             >

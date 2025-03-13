@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import booksData from "@/data/books.json";
 import { Book } from "@/types/book";
+import { BookCover } from "@/components/BookCover"; // Import the BookCover component
 
 export const SearchDropdown = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,10 +63,9 @@ export const SearchDropdown = () => {
               key={book.id}
               className="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
-              <img
-                src={book.cover}
-                alt={book.title}
-                className="w-12 h-16 object-cover mr-4 rounded"
+              <BookCover 
+                book={book} 
+                className="w-12 h-16 object-cover mr-4 rounded" 
               />
               <div>
                 <div className="font-semibold text-sm dark:text-white">
