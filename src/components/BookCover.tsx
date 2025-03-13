@@ -1,5 +1,6 @@
 import React from 'react';
 import { Book } from "@/types/book";
+import Image from 'next/image';
 
 interface BookCoverProps {
   book: Book;
@@ -8,7 +9,8 @@ interface BookCoverProps {
 
 export const BookCover = ({ book, className = "max-w-full h-auto rounded-lg shadow-lg" }: BookCoverProps) => {
   return (
-    <img
+    <Image
+      width={500}
       src={book.cover}
       alt={book.title}
       className={className}
