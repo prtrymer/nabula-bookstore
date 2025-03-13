@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 interface CalendarProps {
   month: number;
@@ -11,13 +11,16 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
   const [currentMonth, setCurrentMonth] = React.useState(month);
   const [currentYear, setCurrentYear] = React.useState(year);
 
-  const handleMonthChange = (offset: number) => {
+  const handleMonthChange = useCallback((offset: number) => {
     const newDate = new Date(currentYear, currentMonth + offset);
     setCurrentMonth(newDate.getMonth());
     setCurrentYear(newDate.getFullYear());
-  };
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  }, [currentMonth, currentYear]);
 
+  const handleDecreaseMonth = useCallback(() => handleMonthChange(-1), [handleMonthChange]);
+  const handleIncreaseMonth = useCallback(() => handleMonthChange(1), [handleMonthChange]);
+
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
   const adjustedFirstDayOfMonth = (firstDayOfMonth + 6) % 7;
 
   return (
@@ -33,7 +36,7 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
             })}
           </h2>
           <div className="flex space-x-4">
-            <button onClick={() => handleMonthChange(-1)}>
+            <button onClick={handleDecreaseMonth}>
               <svg
                 width="8"
                 height="14"
@@ -50,7 +53,7 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
                 />
               </svg>
             </button>
-            <button onClick={() => handleMonthChange(1)}>
+            <button onClick={handleIncreaseMonth}>
               <svg
                 width="8"
                 height="14"
@@ -69,52 +72,34 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
             </button>
           </div>
         </div>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="p-2">Mon</th>
-              <th className="p-2">Tue</th>
-              <th className="p-2">Wed</th>
-              <th className="p-2">Thu</th>
-              <th className="p-2">Fri</th>
-              <th className="p-2">Sat</th>
-              <th className="p-2">Sun</th>
-            </tr>
-          </thead>
-            <tbody>
-            {Array.from(
-              {
-              length: Math.max(6, Math.ceil((daysInMonth + adjustedFirstDayOfMonth) / 7)),
-              },
-              (_, weekIndex) => (
-              <tr key={weekIndex}>
-                {Array.from({ length: 7 }, (_, dayIndex) => {
-                const day =
-                  weekIndex * 7 + dayIndex - adjustedFirstDayOfMonth + 1;
-                return (
-                  <td
-                  key={dayIndex}
-                  className={`p-2 ${
-                    day > 0 && day <= daysInMonth
-                    ? "text-gray-800 dark:text-white"
-                    : ""
-                  }`}
-                  >
-                  {day > 0 && day <= daysInMonth ? (
-                    <div className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-background-red dark:hover:bg-background-green hover:text-white">
-                    {day}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  </td>
-                );
-                })}
-              </tr>
-              )
-            )}
-            </tbody>
-        </table>
+        
+        {/* Days of the week */}
+        <div className="grid grid-cols-7 gap-2 mb-2">
+          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+            <div key={day} className="text-center font-medium text-sm">
+              {day}
+            </div>
+          ))}
+        </div>
+        
+        {/* Days grid */}
+        <div className="grid grid-cols-7 gap-2">
+          {Array.from({ length: adjustedFirstDayOfMonth }).map((_, index) => (
+            <div key={`empty-${index}`} className="h-8 w-8"></div>
+          ))}
+          
+          {Array.from({ length: daysInMonth }).map((_, index) => {
+            const day = index + 1;
+            return (
+              <div
+                key={day}
+                className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+              >
+                {day}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

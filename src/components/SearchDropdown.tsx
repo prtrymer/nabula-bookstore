@@ -4,67 +4,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-
-const initialBooks = [
-    {
-      id: 1,
-      title: "The Starlight Chronicles",
-      author: "Elena Rodriguez",
-      price: 24.99,
-      rating: 4.7,
-      cover: "/api/placeholder/200/300",
-      quantity: 1,
-    },
-    {
-      id: 2,
-      title: "Quantum Horizons",
-      author: "Dr. Michael Chen",
-      price: 29.99,
-      rating: 4.5,
-      cover: "/api/placeholder/200/300",
-      quantity: 1,
-    },
-    {
-      id: 3,
-      title: "Urban Whispers",
-      author: "Sophia Martinez",
-      price: 19.99,
-      rating: 4.9,
-      cover: "/api/placeholder/200/300",
-      quantity: 1,
-    },
-    {
-      id: 4,
-      title: "The Starlight Chronicles",
-      author: "Elena Rodriguez",
-      price: 24.99,
-      rating: 4.7,
-      cover: "/api/placeholder/200/300",
-      quantity: 1,
-    },
-    {
-      id: 5,
-      title: "Quantum Horizons",
-      author: "Dr. Michael Chen",
-      price: 29.99,
-      rating: 4.5,
-      cover: "/api/placeholder/200/300",
-      quantity: 1,
-    },
-    {
-      id: 6,
-      title: "Urban Whispers",
-      author: "Sophia Martinez",
-      price: 19.99,
-      rating: 4.9,
-      cover: "/api/placeholder/200/300",
-      quantity: 1,
-    },
-  ];
+import booksData from '@/data/books.json';
+import { Book } from '@/types/book';
 
 export const SearchDropdown = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [suggestions, setSuggestions] = useState<typeof initialBooks>([]);
+  const [suggestions, setSuggestions] = useState<Book[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const searchBooks = (term: string) => {
@@ -76,7 +21,8 @@ export const SearchDropdown = () => {
       return;
     }
 
-    const filtered = initialBooks.filter(book => 
+    const books = booksData as Book[];
+    const filtered = books.filter(book => 
       book.title.toLowerCase().includes(term.toLowerCase()) ||
       book.author.toLowerCase().includes(term.toLowerCase())
     );

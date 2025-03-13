@@ -1,72 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-
-const initialBooks = [
-  {
-    id: 1,
-    title: "The Starlight Chronicles",
-    author: "Elena Rodriguez",
-    price: 24.99,
-    rating: 4.7,
-    cover: "/api/placeholder/200/300",
-    quantity: 1,
-  },
-  {
-    id: 2,
-    title: "Quantum Horizons",
-    author: "Dr. Michael Chen",
-    price: 29.99,
-    rating: 4.5,
-    cover: "/api/placeholder/200/300",
-    quantity: 1,
-  },
-  {
-    id: 3,
-    title: "Urban Whispers",
-    author: "Sophia Martinez",
-    price: 19.99,
-    rating: 4.9,
-    cover: "/api/placeholder/200/300",
-    quantity: 1,
-  },
-  {
-    id: 4,
-    title: "The Starlight Chronicles",
-    author: "Elena Rodriguez",
-    price: 24.99,
-    rating: 4.7,
-    cover: "/api/placeholder/200/300",
-    quantity: 1,
-  },
-  {
-    id: 5,
-    title: "Quantum Horizons",
-    author: "Dr. Michael Chen",
-    price: 29.99,
-    rating: 4.5,
-    cover: "/api/placeholder/200/300",
-    quantity: 1,
-  },
-  {
-    id: 6,
-    title: "Urban Whispers",
-    author: "Sophia Martinez",
-    price: 19.99,
-    rating: 4.9,
-    cover: "/api/placeholder/200/300",
-    quantity: 1,
-  },
-];
+import booksData from "@/data/books.json";
+import { Book } from "@/types/book";
 
 export default function Home() {
-  const [books] = useState(initialBooks);
-  const {addToCart} = useCart();
+  // Properly type the state
+  const [books, setBooks] = useState<Book[]>([]);
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    // TypeScript now knows the shape of the data
+    setBooks(booksData as Book[]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-background-grey flex flex-col overflow-auto">
@@ -76,8 +27,8 @@ export default function Home() {
             <Card
               key={book.id}
               className="hover:shadow-lg transition-shadow 
-            bg-white dark:bg-background-grey
-            dark:border-gray-700"
+              bg-white dark:bg-background-grey
+              dark:border-gray-700"
             >
               <CardHeader>
                 <Link href={`/book/${book.id}`}>
@@ -109,7 +60,7 @@ export default function Home() {
                     <Button
                       onClick={() => addToCart(book)}
                       className="bg-indigo-600 hover:bg-indigo-700 
-      dark:bg-indigo-800 dark:hover:bg-indigo-700"
+                      dark:bg-indigo-800 dark:hover:bg-indigo-700"
                     >
                       Add to Cart
                     </Button>
