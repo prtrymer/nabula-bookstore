@@ -1,15 +1,21 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
-import booksData from '@/data/books.json';
-import { Book } from '@/types/book';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart, Star } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import booksData from "@/data/books.json";
+import { Book } from "@/types/book";
 
-export default function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function BookDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { addToCart } = useCart();
-  const [unwrappedParams, setUnwrappedParams] = React.useState<{ id: string } | null>(null);
+  const [unwrappedParams, setUnwrappedParams] = React.useState<{
+    id: string;
+  } | null>(null);
 
   React.useEffect(() => {
     params.then(setUnwrappedParams);
@@ -21,19 +27,21 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
 
   const bookId = parseInt(unwrappedParams.id);
   const books = booksData as Book[];
-  const book = books.find(b => b.id === bookId);
+  const book = books.find((b) => b.id === bookId);
 
   if (!book) {
-    return <div className="min-h-screen bg-gray-50 text-black">Book not found</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 text-black">Book not found</div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 text-black dark:bg-background-grey dark:text-white">
       <div className="grid md:grid-cols-2 gap-8">
         <div className="flex justify-center">
-          <img 
-            src={book.cover} 
-            alt={book.title} 
+          <img
+            src={book.cover}
+            alt={book.title}
             className="max-w-full h-auto rounded-lg shadow-lg"
           />
         </div>
@@ -41,13 +49,15 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
         <div>
           <h1 className="text-3xl font-bold mb-4">{book.title}</h1>
           <p className="text-xl text-gray-600 mb-2">by {book.author}</p>
-          
+
           <div className="flex items-center mb-4">
             <div className="flex items-center text-yellow-500 mr-4">
               <Star className="mr-1" fill="currentColor" />
               <span>{book.rating} / 5</span>
             </div>
-            <span className="font-bold text-2xl text-indigo-600">${book.price.toFixed(2)}</span>
+            <span className="font-bold text-2xl text-indigo-600">
+              ${book.price.toFixed(2)}
+            </span>
           </div>
 
           <div className="mb-6">
@@ -75,14 +85,14 @@ export default function BookDetailPage({ params }: { params: Promise<{ id: strin
           </div>
 
           <div className="flex space-x-4">
-            <Button 
+            <Button
               onClick={() => {
                 addToCart(book);
-                window.location.href = '/cart';
+                window.location.href = "/cart";
               }}
               className="flex items-center"
             >
-              <ShoppingCart className="mr-2" /> 
+              <ShoppingCart className="mr-2" />
               Add to Cart
             </Button>
           </div>

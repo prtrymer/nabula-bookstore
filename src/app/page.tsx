@@ -10,17 +10,14 @@ import booksData from "@/data/books.json";
 import { Book } from "@/types/book";
 
 export default function Home() {
-  // Properly type the state
   const [books, setBooks] = useState<Book[]>([]);
   const { addToCart } = useCart();
 
   useEffect(() => {
-    // TypeScript now knows the shape of the data
     setBooks(booksData as Book[]);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background-grey flex flex-col overflow-auto">
       <main className="container mx-auto px-4 py-8 flex-grow overflow-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {books.map((book) => (
@@ -71,6 +68,5 @@ export default function Home() {
           ))}
         </div>
       </main>
-    </div>
   );
 }

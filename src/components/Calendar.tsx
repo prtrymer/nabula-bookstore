@@ -11,14 +11,23 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
   const [currentMonth, setCurrentMonth] = React.useState(month);
   const [currentYear, setCurrentYear] = React.useState(year);
 
-  const handleMonthChange = useCallback((offset: number) => {
-    const newDate = new Date(currentYear, currentMonth + offset);
-    setCurrentMonth(newDate.getMonth());
-    setCurrentYear(newDate.getFullYear());
-  }, [currentMonth, currentYear]);
+  const handleMonthChange = useCallback(
+    (offset: number) => {
+      const newDate = new Date(currentYear, currentMonth + offset);
+      setCurrentMonth(newDate.getMonth());
+      setCurrentYear(newDate.getFullYear());
+    },
+    [currentMonth, currentYear]
+  );
 
-  const handleDecreaseMonth = useCallback(() => handleMonthChange(-1), [handleMonthChange]);
-  const handleIncreaseMonth = useCallback(() => handleMonthChange(1), [handleMonthChange]);
+  const handleDecreaseMonth = useCallback(
+    () => handleMonthChange(-1),
+    [handleMonthChange]
+  );
+  const handleIncreaseMonth = useCallback(
+    () => handleMonthChange(1),
+    [handleMonthChange]
+  );
 
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
   const adjustedFirstDayOfMonth = (firstDayOfMonth + 6) % 7;
@@ -72,7 +81,7 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
             </button>
           </div>
         </div>
-        
+
         {/* Days of the week */}
         <div className="grid grid-cols-7 gap-2 mb-2">
           {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
@@ -81,13 +90,13 @@ const Calendar: React.FC<CalendarProps> = ({ month, year }) => {
             </div>
           ))}
         </div>
-        
+
         {/* Days grid */}
         <div className="grid grid-cols-7 gap-2">
           {Array.from({ length: adjustedFirstDayOfMonth }).map((_, index) => (
             <div key={`empty-${index}`} className="h-8 w-8"></div>
           ))}
-          
+
           {Array.from({ length: daysInMonth }).map((_, index) => {
             const day = index + 1;
             return (
